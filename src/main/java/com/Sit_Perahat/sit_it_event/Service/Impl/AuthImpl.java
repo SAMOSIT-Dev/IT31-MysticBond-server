@@ -55,4 +55,31 @@ public class AuthImpl implements AuthService {
             throw new RuntimeException("Failed to get token: " + response.body());
         }
     }
+
+    @Override
+    public LoginResponse RefreshToken(String refreshToken) throws IOException, InterruptedException {
+
+        HttpClient client = HttpClient.newHttpClient();
+        String form = new StringBuilder()
+                .append("grant_type=refresh_token")
+                .append("&client_id=").append(URLEncoder.encode(clientId, StandardCharsets.UTF_8))
+                .append("&client_secret=").append(URLEncoder.encode(clientSecret, StandardCharsets.UTF_8))
+                .append("&refresh_token=").append(URLEncoder.encode(refreshToken, StandardCharsets.UTF_8))
+                .toString();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(tokenUrl))
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .POST(HttpRequest.BodyPublishers.ofString(form))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            ObjectMapper mapper = new ObjectMapper();
+            LoginResponse loginResponse = mapper.readValue(response.body(), LoginResponse.class);
+            return loginResponse;
+        } else {
+            throw new RuntimeException("Failed to Use Refresh token: " + response.body());
+        }
+    }
 }

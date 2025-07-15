@@ -8,4 +8,8 @@ public interface AuthService {
 
     LoginResponse Login(String username, String password) throws IOException, InterruptedException;
 
+
+
+    LoginResponse RefreshToken(String refreshToken) throws IOException, InterruptedException;
+
 }
