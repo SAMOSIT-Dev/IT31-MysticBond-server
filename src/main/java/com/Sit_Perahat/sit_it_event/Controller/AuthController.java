@@ -5,6 +5,7 @@ import com.Sit_Perahat.sit_it_event.Service.AuthService;
 import com.Sit_Perahat.sit_it_event.dto.DefaultResponse;
 import com.Sit_Perahat.sit_it_event.dto.LoginRequest;
 import com.Sit_Perahat.sit_it_event.dto.LoginResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,20 +29,8 @@ public class AuthController {
 
 
     @RequestMapping("/login")
-    public ResponseEntity<DefaultResponse> Auth(@RequestBody LoginRequest loginRequest) throws InterruptedException, IOException {
+    public ResponseEntity<DefaultResponse> Auth(@Valid @RequestBody LoginRequest loginRequest) throws InterruptedException, IOException {
 
-        if (loginRequest.getUsername() == null || loginRequest.getUsername().isEmpty() || loginRequest.getPassword() == null || loginRequest.getPassword().isEmpty()) {
-            Map<String, String> errors = new HashMap<>();
-            if (loginRequest.getUsername() == null || loginRequest.getUsername().isEmpty()) {
-                errors.put("username", "username or password is empty");
-            }
-            if (loginRequest.getPassword() == null || loginRequest.getPassword().isEmpty()) {
-                errors.put("password", "password is empty");
-            }
-
-            DefaultResponse response = new DefaultResponse("Error", "Validation Failed", errors);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
         try {
 
             LoginResponse tokenResponse = authService.Login(loginRequest.getUsername(), loginRequest.getPassword());
@@ -116,7 +105,6 @@ public class AuthController {
             errors.put("IOException", "Token server not reachable");
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
                     .body(new DefaultResponse("error", "Network error", errors));
-
         } catch (InterruptedException e) {
             Map<String, String> errors = new HashMap<>();
             errors.put("InterruptedException", "Login process was interrupted");

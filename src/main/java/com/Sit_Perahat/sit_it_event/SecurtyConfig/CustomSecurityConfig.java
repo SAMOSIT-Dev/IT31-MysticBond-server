@@ -23,9 +23,6 @@ public class CustomSecurityConfig {
 
 
     @Autowired
-    private CustomJwtAuthenticationEntryPoint customJwtAuthenticationEntryPoint;
-
-    @Autowired
     private JwtCookieFilter  jwtCookieFilter;
 
     @Bean
