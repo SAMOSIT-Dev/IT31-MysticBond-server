@@ -65,7 +65,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new DefaultResponse("error", "Operation interrupted", errors));
 
-        } catch (RuntimeException e) {
+        }catch (RuntimeException e) {
             Map<String, Object> errors = new HashMap<>();
             errors.put("RuntimeException", "Invalid Credentials");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -115,7 +115,7 @@ public class AuthController {
             Map<String, Object> errors = new HashMap<>();
             errors.put("RuntimeException", e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new DefaultResponse("error", "Login failed", errors));
+                    .body(new DefaultResponse("error", "Refresh Token expired", errors));
         }
     }
 }
