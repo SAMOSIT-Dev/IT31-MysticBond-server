@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/users")
@@ -29,7 +30,7 @@ public class AuthController {
 
 
     @RequestMapping("/login")
-    public ResponseEntity<DefaultResponse> Auth(@Valid @RequestBody LoginRequest loginRequest) throws InterruptedException, IOException {
+    public ResponseEntity<DefaultResponse> Auth(@Valid @RequestBody LoginRequest loginRequest) {
 
         try {
 
@@ -53,19 +54,19 @@ public class AuthController {
             return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, refreshCookie.toString(), accessCookies.toString()).body(new DefaultResponse("success", "Login Success", null));
 
         } catch (IOException e) {
-            Map<String, String> errors = new HashMap<>();
+            Map<String, Object> errors = new HashMap<>();
             errors.put("IOException", "Token server not reachable");
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
                     .body(new DefaultResponse("error", "Network error", errors));
 
         } catch (InterruptedException e) {
-            Map<String, String> errors = new HashMap<>();
+            Map<String, Object> errors = new HashMap<>();
             errors.put("InterruptedException", "Login process was interrupted");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new DefaultResponse("error", "Operation interrupted", errors));
 
         } catch (RuntimeException e) {
-            Map<String, String> errors = new HashMap<>();
+            Map<String, Object> errors = new HashMap<>();
             errors.put("RuntimeException", "Invalid Credentials");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new DefaultResponse("error", "Login failed", errors));
@@ -73,11 +74,10 @@ public class AuthController {
     }
 
     @RequestMapping("/refresh")
-    public ResponseEntity<DefaultResponse> refreshToken(@CookieValue(name = "REFRESH_TOKEN", required = false) String refreshToken)
-            throws InterruptedException, IOException {
+    public ResponseEntity<DefaultResponse> refreshToken(@CookieValue(name = "REFRESH_TOKEN", required = true) String refreshToken) {
 
         if (refreshToken == null || refreshToken.isEmpty()) {
-            Map<String, String> errors = new HashMap<>();
+            Map<String, Object> errors = new HashMap<>();
             errors.put("refresh_token", "refresh token is empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new DefaultResponse("error", "validation Failed",errors));
@@ -101,18 +101,18 @@ public class AuthController {
 
 
         }catch (IOException e) {
-            Map<String, String> errors = new HashMap<>();
+            Map<String, Object> errors = new HashMap<>();
             errors.put("IOException", "Token server not reachable");
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
                     .body(new DefaultResponse("error", "Network error", errors));
         } catch (InterruptedException e) {
-            Map<String, String> errors = new HashMap<>();
+            Map<String, Object> errors = new HashMap<>();
             errors.put("InterruptedException", "Login process was interrupted");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new DefaultResponse("error", "Operation interrupted", errors));
 
         } catch (RuntimeException e) {
-            Map<String, String> errors = new HashMap<>();
+            Map<String, Object> errors = new HashMap<>();
             errors.put("RuntimeException", e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new DefaultResponse("error", "Login failed", errors));
