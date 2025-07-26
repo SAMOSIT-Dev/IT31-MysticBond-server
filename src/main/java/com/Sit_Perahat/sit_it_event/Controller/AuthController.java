@@ -2,10 +2,14 @@ package com.Sit_Perahat.sit_it_event.Controller;
 
 
 import com.Sit_Perahat.sit_it_event.Service.AuthService;
+import com.Sit_Perahat.sit_it_event.Service.UsersService;
 import com.Sit_Perahat.sit_it_event.dto.DefaultResponse;
 import com.Sit_Perahat.sit_it_event.dto.LoginRequest;
 import com.Sit_Perahat.sit_it_event.dto.LoginResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,20 +26,21 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
-
+    private final AuthService authService;
+    private final UsersService usersService;
 
     @RequestMapping("/login")
     public ResponseEntity<DefaultResponse> Auth(@Valid @RequestBody LoginRequest loginRequest) {
 
         try {
 
-            LoginResponse tokenResponse = authService.Login(loginRequest.getUsername(), loginRequest.getPassword());
+            usersService.findUser(loginRequest.getStudentId());
 
+            LoginResponse tokenResponse = authService.Login(loginRequest.getStudentId(), loginRequest.getPassword());
             ResponseCookie refreshCookie = ResponseCookie.from("REFRESH_TOKEN", tokenResponse.getRefresh_token())
                     .httpOnly(true)
                     .secure(false)
