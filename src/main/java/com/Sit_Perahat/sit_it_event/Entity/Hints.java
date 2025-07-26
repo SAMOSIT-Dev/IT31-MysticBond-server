@@ -15,6 +15,6 @@ public class Hints {
     private String message;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId",referencedColumnName = "id")
-    private Users user;
+    @JoinColumn(name = "student_id",referencedColumnName = "studentId")
+    private Users users;
 }

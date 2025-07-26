@@ -8,9 +8,9 @@ import lombok.Data;
 @Data
 public class LoginRequest {
 
-    @NotNull(message = "username cannot null")
-    @NotBlank(message = "username cannot blank")
-    private String username;
+    @NotNull(message = "studentId cannot null")
+    @NotBlank(message = "studentId cannot blank")
+    private String studentId;
 
     @NotNull(message = "password cannot null")
     @NotBlank(message = "password cannot blank")
