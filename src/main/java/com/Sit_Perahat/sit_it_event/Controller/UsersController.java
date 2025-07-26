@@ -31,8 +31,6 @@ public class UsersController {
         try{
             Map<String, Object> response = new HashMap<>();
             Users user = usersService.findUser(studentId);
-            System.out.println(user);
-            response.put("users",user);
             return  ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success","Retrieve Users By Id " + studentId,response));
         }catch (RuntimeException e){
             Map<String, Object> errors = new HashMap<>();
