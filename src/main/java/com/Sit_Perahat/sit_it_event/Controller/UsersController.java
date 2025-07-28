@@ -38,12 +38,12 @@ public class UsersController {
             LocalDate allowedDate = LocalDate.of(2025, 8, 7);
             LocalDate today = LocalDate.now();
             Users user = usersService.findUser(studentId);
-//
-//            if (today.equals(allowedDate)) {
-//                response.put("user", user);
-//                return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
-//            }
-            response.put("user", user);
+
+            if (today.equals(allowedDate)) {
+                response.put("user", user);
+                return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
+            }
+            response.put("message", "ยังไม่ถึงเวลารู้บ้านครับน้อง");
             return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
         } catch (RuntimeException e) {
             Map<String, Object> errors = new HashMap<>();
