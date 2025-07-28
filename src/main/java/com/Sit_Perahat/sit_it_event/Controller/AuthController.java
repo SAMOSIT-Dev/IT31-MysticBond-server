@@ -41,22 +41,24 @@ public class AuthController {
             usersService.findUser(loginRequest.getStudentId());
 
             LoginResponse tokenResponse = authService.Login(loginRequest.getStudentId(), loginRequest.getPassword());
-            ResponseCookie refreshCookie = ResponseCookie.from("REFRESH_TOKEN", tokenResponse.getRefresh_token())
-                    .httpOnly(true)
-                    .secure(false)
-                    .path("/")
-                    .maxAge(7 * 24 * 60 * 60)
-                    .sameSite("Strict")
-                    .build();
-
-            ResponseCookie accessCookies = ResponseCookie.from("ACCESS_TOKEN", tokenResponse.getAccess_token())
-                    .httpOnly(true)
-                    .secure(false)
-                    .path("/")
-                    .maxAge(7 * 24 * 60 * 60)
-                    .sameSite("Strict")
-                    .build();
-            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, refreshCookie.toString(), accessCookies.toString()).body(new DefaultResponse("success", "Login Success", null));
+//            ResponseCookie refreshCookie = ResponseCookie.from("REFRESH_TOKEN", tokenResponse.getRefresh_token())
+//                    .httpOnly(true)
+//                    .secure(false)
+//                    .path("/")
+//                    .maxAge(7 * 24 * 60 * 60)
+//                    .sameSite("Strict")
+//                    .build();
+//
+//            ResponseCookie accessCookies = ResponseCookie.from("ACCESS_TOKEN", tokenResponse.getAccess_token())
+//                    .httpOnly(true)
+//                    .secure(false)
+//                    .path("/")
+//                    .maxAge(7 * 24 * 60 * 60)
+//                    .sameSite("Strict")
+//                    .build();
+            Map<String, Object> response = new HashMap<>();
+            response.put("ACCESS_TOKEN", tokenResponse.getAccess_token());
+            return ResponseEntity.ok().body(new DefaultResponse("success", "Login Success", response));
 
         } catch (IOException e) {
             Map<String, Object> errors = new HashMap<>();
