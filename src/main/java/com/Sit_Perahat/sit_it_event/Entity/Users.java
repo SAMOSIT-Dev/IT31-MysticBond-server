@@ -19,5 +19,6 @@ public class Users {
     @JoinColumn(name = "house_id",referencedColumnName = "id")
     private Houses house;
 
+    @Column(name = "is_answered", nullable = false)
     private Boolean isAnswered;
 }
