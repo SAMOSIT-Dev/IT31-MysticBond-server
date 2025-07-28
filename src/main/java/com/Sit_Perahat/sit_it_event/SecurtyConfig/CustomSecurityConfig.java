@@ -32,6 +32,7 @@ public class CustomSecurityConfig {
                         .requestMatchers("/users","/hints").authenticated()
                         .anyRequest().permitAll()
                 )
+                .cors(Customizer.withDefaults())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults()))
                 .addFilterBefore(jwtCookieFilter, BearerTokenAuthenticationFilter.class)
