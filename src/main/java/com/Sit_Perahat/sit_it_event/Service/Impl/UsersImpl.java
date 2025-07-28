@@ -24,6 +24,7 @@ public class UsersImpl implements UsersService {
     @Override
     public Users UpdateUser(Houses houses,Users users) {
         users.setHouse(houses);
+        users.setIsAnswered(true);
         usersRepository.save(users);
         return users;
     }
