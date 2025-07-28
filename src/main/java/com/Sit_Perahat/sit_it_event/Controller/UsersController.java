@@ -44,7 +44,7 @@ public class UsersController {
                 return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
             }
             response.put("message", "ยังไม่ถึงเวลารู้บ้านครับน้อง");
-            response.put("isAnswered", user.getIsAnswered());
+            response.put("user", user.getIsAnswered());
             return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
         } catch (RuntimeException e) {
             Map<String, Object> errors = new HashMap<>();
