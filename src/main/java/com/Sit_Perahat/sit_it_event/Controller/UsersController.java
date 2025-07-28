@@ -44,7 +44,11 @@ public class UsersController {
                 return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
             }
             response.put("message", "ยังไม่ถึงเวลารู้บ้านครับน้อง");
-            response.put("user", user.getIsAnswered());
+            UserResponse userResponse = new UserResponse();
+            userResponse.setStudentId(studentId);
+            userResponse.setNickname(user.getNickname());
+            userResponse.setIsAnswered(user.getIsAnswered());
+            response.put("user", userResponse);
             return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
         } catch (RuntimeException e) {
             Map<String, Object> errors = new HashMap<>();
