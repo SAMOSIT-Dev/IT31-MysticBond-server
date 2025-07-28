@@ -14,7 +14,7 @@ public class CorsConfig
             CorsRegistry registry) {
 
         registry.addMapping("/**")
-                .allowedOrigins("https://it31-mysticbond.sit.kmutt.ac.th/samosit/it31-mysticbond")
+                .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT")
                 .allowedHeaders("*")
                 .allowCredentials(true)
