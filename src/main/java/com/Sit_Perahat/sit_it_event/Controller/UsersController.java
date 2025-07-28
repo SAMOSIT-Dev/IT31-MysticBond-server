@@ -66,7 +66,7 @@ public class UsersController {
             int randomIndex = random.nextInt(houseIds.length);
             Houses houses = houseService.getHouseById(houseIds[randomIndex]).orElseThrow(RuntimeException::new);
             Users updatedUser = usersService.UpdateUser(houses, user);
-            response.put("user", new UserResponse(updatedUser.getStudentId(),updatedUser.getNickname()));
+            response.put("user", user);
             return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Update House Users By Id " + studentId, response));
         } catch (RuntimeException e) {
             Map<String, Object> errors = new HashMap<>();

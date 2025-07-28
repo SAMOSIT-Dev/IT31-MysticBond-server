@@ -18,4 +18,6 @@ public class Users {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "house_id",referencedColumnName = "id")
     private Houses house;
+
+    private Boolean isAnswered;
 }

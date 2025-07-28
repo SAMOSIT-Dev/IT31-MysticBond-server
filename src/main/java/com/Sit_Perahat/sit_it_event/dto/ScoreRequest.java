@@ -7,4 +7,5 @@ import lombok.Data;
 public class ScoreRequest {
 
     private double score;
+    private boolean isAnswered;
 }
