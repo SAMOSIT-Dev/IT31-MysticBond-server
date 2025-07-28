@@ -6,6 +6,7 @@ import com.Sit_Perahat.sit_it_event.Service.UsersService;
 import com.Sit_Perahat.sit_it_event.dto.DefaultResponse;
 import com.Sit_Perahat.sit_it_event.dto.LoginRequest;
 import com.Sit_Perahat.sit_it_event.dto.LoginResponse;
+import com.Sit_Perahat.sit_it_event.dto.RefreshToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -41,23 +42,10 @@ public class AuthController {
             usersService.findUser(loginRequest.getStudentId());
 
             LoginResponse tokenResponse = authService.Login(loginRequest.getStudentId(), loginRequest.getPassword());
-//            ResponseCookie refreshCookie = ResponseCookie.from("REFRESH_TOKEN", tokenResponse.getRefresh_token())
-//                    .httpOnly(true)
-//                    .secure(false)
-//                    .path("/")
-//                    .maxAge(7 * 24 * 60 * 60)
-//                    .sameSite("Strict")
-//                    .build();
-//
-//            ResponseCookie accessCookies = ResponseCookie.from("ACCESS_TOKEN", tokenResponse.getAccess_token())
-//                    .httpOnly(true)
-//                    .secure(false)
-//                    .path("/")
-//                    .maxAge(7 * 24 * 60 * 60)
-//                    .sameSite("Strict")
-//                    .build();
+
             Map<String, Object> response = new HashMap<>();
             response.put("ACCESS_TOKEN", tokenResponse.getAccess_token());
+            response.put("REFRESH_TOKEN",tokenResponse.getRefresh_token());
             return ResponseEntity.ok().body(new DefaultResponse("success", "Login Success", response));
 
         } catch (IOException e) {
@@ -81,9 +69,9 @@ public class AuthController {
     }
 
     @RequestMapping("/refresh")
-    public ResponseEntity<DefaultResponse> refreshToken(@CookieValue(name = "REFRESH_TOKEN", required = true) String refreshToken) {
+    public ResponseEntity<DefaultResponse> refreshToken(@Valid @RequestBody RefreshToken refreshToken) {
 
-        if (refreshToken == null || refreshToken.isEmpty()) {
+        if (refreshToken.getRefresh_token() == null ||  refreshToken.getRefresh_token().isEmpty()) {
             Map<String, Object> errors = new HashMap<>();
             errors.put("refresh_token", "refresh token is empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -91,20 +79,12 @@ public class AuthController {
         }
 
         try {
-            LoginResponse tokenResponse = authService.RefreshToken(refreshToken);
-
-
-            ResponseCookie accessCookie = ResponseCookie.from("ACCESS_TOKEN", tokenResponse.getAccess_token())
-                    .httpOnly(true)
-                    .secure(false)
-                    .path("/")
-                    .maxAge(7 * 24 * 60 * 60)
-                    .sameSite("Strict")
-                    .build();
-
+            LoginResponse tokenResponse = authService.RefreshToken(refreshToken.getRefresh_token());
+            Map<String, Object> response = new HashMap<>();
+            response.put("ACCESS_TOKEN", tokenResponse.getAccess_token());
+            response.put("REFRESH_TOKEN",tokenResponse.getRefresh_token());
             return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
-                    .body(new DefaultResponse("success", "Use Refresh_token Success", null));
+                    .body(new DefaultResponse("success", "Use Refresh_token Success", response));
 
 
         }catch (IOException e) {
