@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -33,8 +34,15 @@ public class UsersController {
         Map<String, Object> response = new HashMap<>();
         String studentId = jwtProvider.getUserNameFromAuthentication(authentication);
         try {
+            LocalDate allowedDate = LocalDate.of(2025, 8, 7);
+            LocalDate today = LocalDate.now();
             Users user = usersService.findUser(studentId);
-            response.put("user", user);
+
+            if (today.equals(allowedDate)) {
+                response.put("user", user);
+                return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
+            }
+            response.put("message", "ยังไม่ถึงเวลาไอสัส");
             return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
         } catch (RuntimeException e) {
             Map<String, Object> errors = new HashMap<>();
