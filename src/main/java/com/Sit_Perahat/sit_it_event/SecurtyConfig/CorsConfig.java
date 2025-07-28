@@ -14,8 +14,8 @@ public class CorsConfig
             CorsRegistry registry) {
 
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4200")
-                .allowedMethods("*")
+                .allowedOrigins("https://it31-mysticbond.sit.kmutt.ac.th/samosit/it31-mysticbond")
+                .allowedMethods("GET", "POST", "PUT")
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .maxAge(3600);

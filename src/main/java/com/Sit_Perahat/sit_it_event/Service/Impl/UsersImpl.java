@@ -1,5 +1,6 @@
 package com.Sit_Perahat.sit_it_event.Service.Impl;
 
+import com.Sit_Perahat.sit_it_event.Entity.Houses;
 import com.Sit_Perahat.sit_it_event.Entity.Users;
 import com.Sit_Perahat.sit_it_event.Repository.UsersRepository;
 import com.Sit_Perahat.sit_it_event.Service.AuthService;
@@ -18,5 +19,12 @@ public class UsersImpl implements UsersService {
     @Override
     public Users findUser(String studentId) {
         return usersRepository.findUsersByStudentId(studentId).orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public Users UpdateUser(Houses houses,Users users) {
+        users.setHouse(houses);
+        usersRepository.save(users);
+        return users;
     }
 }
