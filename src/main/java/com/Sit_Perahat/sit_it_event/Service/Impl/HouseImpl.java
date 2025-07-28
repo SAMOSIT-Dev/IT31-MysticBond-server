@@ -26,4 +26,9 @@ public class HouseImpl implements HouseService {
     public Optional<Houses> getHouseById(int id) {
         return housesRepository.findById(id);
     }
+
+    @Override
+    public Houses getHousesByName(String houses) {
+        return housesRepository.findHousesByHouseName(houses);
+    }
 }

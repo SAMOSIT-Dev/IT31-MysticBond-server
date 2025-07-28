@@ -3,9 +3,11 @@ package com.Sit_Perahat.sit_it_event.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
 @Data
 public class ScoreRequest {
 
-    private double score;
-    private boolean isAnswered;
+    private Map<String, BigDecimal> data;
 }
