@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,17 +55,25 @@ public class UsersController {
     }
 
     @PutMapping
-    public ResponseEntity<DefaultResponse> updateUsers(Authentication authentication, @RequestBody ScoreRequest scoreRequest) {
+    public ResponseEntity<DefaultResponse> updateUsers(Authentication authentication, @RequestBody ScoreRequest data) {
         Map<String, Object> response = new HashMap<>();
-        double score = scoreRequest.getScore();
         String studentId = jwtProvider.getUserNameFromAuthentication(authentication);
-
-        Random random = new Random();
+        Map<String, String> colorToHouse = Map.of(
+                "R", "Phoenix",
+                "O", "Griffin",
+                "Y", "Qilin",
+                "G", "Basilisk",
+                "B", "Leviathan",
+                "P", "Kitsune"
+        );
         try {
             Users user = usersService.findUser(studentId);
-            int[] houseIds = score <= 14.29 ? new int[]{5,4,1} : new int[]{2,3,6};
-            int randomIndex = random.nextInt(houseIds.length);
-            Houses houses = houseService.getHouseById(houseIds[randomIndex]).orElseThrow(RuntimeException::new);
+            Map.Entry<String, BigDecimal> maxEntry = data.getData().entrySet()
+                    .stream()
+                    .max(Map.Entry.comparingByValue())
+                    .orElseThrow(RuntimeException::new);
+            String house = colorToHouse.get(maxEntry.getKey());
+            Houses houses = houseService.getHousesByName(house);
             Users updatedUser = usersService.UpdateUser(houses, user);
             return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Update House Users By Id " + studentId, null));
         } catch (RuntimeException e) {

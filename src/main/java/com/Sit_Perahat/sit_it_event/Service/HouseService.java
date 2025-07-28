@@ -13,4 +13,6 @@ public interface HouseService {
 
     Optional<Houses> getHouseById(int id);
 
+
+    Houses getHousesByName(String houses);
 }
