@@ -15,7 +15,7 @@ public class Users {
 
     private String nickname;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "house_id",referencedColumnName = "id")
     private Houses house;
 }
