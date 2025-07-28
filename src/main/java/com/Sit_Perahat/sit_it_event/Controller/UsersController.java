@@ -14,7 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -35,11 +36,11 @@ public class UsersController {
         Map<String, Object> response = new HashMap<>();
         String studentId = jwtProvider.getUserNameFromAuthentication(authentication);
         try {
+            ZoneId thailandZoneId = ZoneId.of("Asia/Bangkok");
+            LocalDate today = ZonedDateTime.now(thailandZoneId).toLocalDate();
             LocalDate allowedDate = LocalDate.of(2025, 8, 7);
-            LocalDate today = LocalDate.now();
             Users user = usersService.findUser(studentId);
-
-            if (today.equals(allowedDate)) {
+            if (!today.isBefore(allowedDate)) {
                 response.put("user", user);
                 return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
             }
