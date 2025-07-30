@@ -36,21 +36,21 @@ public class UsersController {
         Map<String, Object> response = new HashMap<>();
         String studentId = jwtProvider.getUserNameFromAuthentication(authentication);
         try {
-            ZoneId thailandZoneId = ZoneId.of("Asia/Bangkok");
-            LocalDate today = ZonedDateTime.now(thailandZoneId).toLocalDate();
-            LocalDate allowedDate = LocalDate.of(2025, 8, 7);
+            // ZoneId thailandZoneId = ZoneId.of("Asia/Bangkok");
+            // LocalDate today = ZonedDateTime.now(thailandZoneId).toLocalDate();
+            // LocalDate allowedDate = LocalDate.of(2025, 8, 7);
             Users user = usersService.findUser(studentId);
-            if (!today.isBefore(allowedDate)) {
+            // if (!today.isBefore(allowedDate)) {
                 response.put("user", user);
                 return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
-            }
-            response.put("message", "ยังไม่ถึงเวลารู้บ้านครับน้อง");
-            UserResponse userResponse = new UserResponse();
-            userResponse.setStudentId(studentId);
-            userResponse.setNickname(user.getNickname());
-            userResponse.setIsAnswered(user.getIsAnswered());
-            response.put("user", userResponse);
-            return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
+            // }
+            // response.put("message", "ยังไม่ถึงเวลารู้บ้านครับน้อง");
+            // UserResponse userResponse = new UserResponse();
+            // userResponse.setStudentId(studentId);
+            // userResponse.setNickname(user.getNickname());
+            // userResponse.setIsAnswered(user.getIsAnswered());
+            // response.put("user", userResponse);
+            // return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve Users By Id " + studentId, response));
         } catch (RuntimeException e) {
             Map<String, Object> errors = new HashMap<>();
             errors.put("RuntimeException", e.getMessage());
