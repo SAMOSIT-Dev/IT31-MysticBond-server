@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +41,23 @@ public class HintController {
                 response.put("hints",new ArrayList<>());
                 return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve all hint by Id " + studentId,response ));
             }
-            response.put("hints", allHints);
+
+            ZoneId thailandZoneId = ZoneId.of("Asia/Bangkok");
+            LocalDate today = ZonedDateTime.now(thailandZoneId).toLocalDate();
+            List<String> hintsToSend;
+
+
+            if (!today.isBefore(LocalDate.of(2025, 8, 14))) {
+                hintsToSend = allHints;
+            } else if (!today.isBefore(LocalDate.of(2025, 8, 12))) {
+                hintsToSend = allHints.subList(0,1);
+            } else if (!today.isBefore(LocalDate.of(2025, 8, 10))) {
+                hintsToSend = allHints.subList(0,2);
+            } else {
+                hintsToSend = new ArrayList<>();
+            }
+
+            response.put("hints", hintsToSend);
             return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve all hint by Id " + studentId,response ));
 
         } catch (RuntimeException e) {
