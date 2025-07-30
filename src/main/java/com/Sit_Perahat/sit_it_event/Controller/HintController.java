@@ -47,11 +47,11 @@ public class HintController {
             List<String> hintsToSend;
 
 
-            if (!today.isBefore(LocalDate.of(2025, 8, 14))) {
+            if (!today.isBefore(LocalDate.of(2025, 7, 31))) {
                 hintsToSend = allHints;
-            } else if (!today.isBefore(LocalDate.of(2025, 8, 12))) {
-                hintsToSend = allHints.subList(0,1);
             } else if (!today.isBefore(LocalDate.of(2025, 8, 10))) {
+                hintsToSend = allHints.subList(0,1);
+            } else if (!today.isBefore(LocalDate.of(2025, 8, 12))) {
                 hintsToSend = allHints.subList(0,2);
             } else {
                 hintsToSend = new ArrayList<>();
