@@ -19,9 +19,6 @@ public class HintsImpl implements HintService {
     @Override
     public List<Hints> findHints(String studentId) {
         List<Hints> hints = hintsRepository.findHintsByUsers_StudentId(studentId);
-        if (hints.isEmpty()) {
-            throw new RuntimeException();
-        }
         return hints;
     }
 }

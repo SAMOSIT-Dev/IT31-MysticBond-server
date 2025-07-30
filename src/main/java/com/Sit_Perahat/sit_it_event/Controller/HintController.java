@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,6 +34,10 @@ public class HintController {
         String studentId = jwtProvider.getUserNameFromAuthentication(authentication);
         try {
             List<String> allHints = hintService.findHints(studentId).stream().map(Hints::getMessage).toList();
+            if (allHints.isEmpty() || allHints == null){
+                response.put("hints",new ArrayList<>());
+                return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve all hint by Id " + studentId,response ));
+            }
             response.put("hints", allHints);
             return ResponseEntity.status(HttpStatus.OK).body(new DefaultResponse("success", "Retrieve all hint by Id " + studentId,response ));
 
